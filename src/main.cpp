@@ -139,6 +139,7 @@ int main(int argc, char *argv[])
 	Rom rom = modify_for_NESfile(load_rom(argv[1]));
 	load_instructions(rom.PRG);
 	write_16bit(0xFFFC, 0x8000);
+	
 	run();
 	// runsfml();
 	// unsigned char char char a = 16777215;

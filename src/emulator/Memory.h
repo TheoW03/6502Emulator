@@ -9,6 +9,7 @@ using namespace std;
 //     virtual void helloWorld();
 // };
 // #endif
+static int clock_cycles = 0;
 
 uint8_t read_8bit(uint16_t address);
 

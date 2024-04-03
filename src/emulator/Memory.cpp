@@ -28,23 +28,26 @@ static int loading = 0;
 // }
 uint8_t read_8bit(uint16_t address)
 {
+	cout << "read_8: " << clock_cycles << endl;
+
 	clock_cycles++;
-	cout << clock_cycles << endl;
 	return memory[address];
 }
 
 uint16_t read_16bit(uint16_t address)
 {
 	uint16_t value = (uint16_t)(memory[address + 1] << 8) | memory[address];
+	cout << "read_16: " << clock_cycles << endl;
+
 	clock_cycles += 2;
 
 	return value;
 }
 void write_8bit(uint16_t address, uint8_t value)
 {
-	clock_cycles += 2;
 	if (loading == 0)
-		cout << "write: " << clock_cycles << endl;
+		cout << "write 8_bit: " << clock_cycles << endl;
+	clock_cycles++;
 
 	memory[address] = value;
 }
@@ -54,6 +57,8 @@ void write_16bit(uint16_t address, uint16_t value)
 	uint8_t lsb = (uint8_t)(value & 0xFF);
 	memory[address] = lsb;
 	memory[address + 1] = msb;
+	cout << "write_16: " << clock_cycles << endl;
+
 	clock_cycles += 2;
 }
 
