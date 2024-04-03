@@ -12,7 +12,8 @@ using namespace std;
 static volatile uint8_t memory[0xFFFF];
 static uint8_t v_memory[0x800];
 static uint16_t reset_vector;
-
+static int clock_cycles = 0;
+static int loading = 0;
 // struct Bus
 // {
 // 	uint8_t v_memory[0x800];
@@ -27,17 +28,24 @@ static uint16_t reset_vector;
 // }
 uint8_t read_8bit(uint16_t address)
 {
+	clock_cycles++;
+	cout << clock_cycles << endl;
 	return memory[address];
 }
 
 uint16_t read_16bit(uint16_t address)
 {
 	uint16_t value = (uint16_t)(memory[address + 1] << 8) | memory[address];
+	clock_cycles += 2;
 
 	return value;
 }
 void write_8bit(uint16_t address, uint8_t value)
 {
+	clock_cycles += 2;
+	if (loading == 0)
+		cout << "write: " << clock_cycles << endl;
+
 	memory[address] = value;
 }
 void write_16bit(uint16_t address, uint16_t value)
@@ -46,17 +54,21 @@ void write_16bit(uint16_t address, uint16_t value)
 	uint8_t lsb = (uint8_t)(value & 0xFF);
 	memory[address] = lsb;
 	memory[address + 1] = msb;
+	clock_cycles += 2;
 }
 
 void load_instructions(vector<uint8_t> instructions)
 {
 	cout << "loaded instructions" << endl;
 	cout << "===============" << endl;
+	loading = 1;
 	for (size_t i = 0; i < instructions.size(); i++)
 	{
 		// printf("PC: %x  instruction: %x \n", (uint16_t)(i + 0x8000), instructions[i]);
 		write_8bit((i + 0x8000), instructions[i]);
 	}
+	loading = 0;
+	clock_cycles = 0;
 	cout << "===============" << endl;
 }
 

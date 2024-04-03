@@ -82,7 +82,7 @@ void run()
 
 		// DEBUG STUFF
 		//  cout << "=======" << endl;
-		// printf("instruction: %x \n", current_instruction);
+		printf("instruction: %x \n", current_instruction);
 		// printf("CPU PC: %x \n", cpu_Processor.PC);
 		// cout << "=======" << endl;
 		// END
